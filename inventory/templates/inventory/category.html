@@ -1,0 +1,356 @@
+{% extends 'inventory/base.html' %}
+{% block title %} Category {% endblock %}
+{% block user %} {{ user.username }} {% endblock %}
+{% block body %}
+    <div class="right-side">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+
+           <!--  <div>
+                    <a href="http://www.codeslab.net/eoffice.php" class="more" target="_blank">We Have a <span style="color: red; font-weight: bold"> Pro Version. eOffice CRM </span><span style="color: red; font-weight: bold"></span>With Inventory + Sales & Purchase + Employee Management + Payroll + Accounting And <span style="color: red; font-weight: bold">Many More.</span></a>
+                </div>-->
+
+                <ol class="breadcrumb">
+                    <li>
+  <!--<a href='http://easy-inventory.codeslab.net/admin/product/category'>Product Category</a>-->
+</li>
+<li>
+  <!--<a href='http://easy-inventory.codeslab.net/#'>Category</a>-->
+</li>
+<li>
+  <!--<a href='http://easy-inventory.codeslab.net/#'>Product</a>-->
+</li>
+                </ol>
+            </section>
+
+            <br/>
+            <div class="container-fluid">
+                <!--Massage-->
+<!--/ Massage-->
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box box-primary">
+                <div class="box-header box-header-background with-border">
+
+                        <h3 class="box-title ">Product Category</h3>
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-background">
+                <!-- form start -->
+                <form role="form" enctype="multipart/form-data" action="{% url 'inventory:category' %}" method="post">
+                {% csrf_token %}
+                    {{ form.errors }}
+                    {{ form.non_field_errors }}
+                    <div class="row">
+
+                        <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+
+                                <!-- /.Company Name -->
+                                <div class="form-group">
+                                    <label>Product Category <span class="required">*</span></label>
+                                    <input type="text" required name="product_category" placeholder="Category Name" class="form-control">
+                                </div>
+
+                                <button type="submit" class="btn bg-navy btn-flat" type="submit">Save Product Category
+                                </button><br/><br/>
+
+                            <!-- /.box-body -->
+
+                        </div>
+                    </div>
+
+                </form>
+                    </div>
+                <div class="box-footer">
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                <table class="table table-bordered table-striped" id="dataTables-example">
+                    <thead>
+                    <tr>
+                        <th class="active col-sm-1">SL</th>
+                        <th class="active">Category Name</th>
+                        <th class=" active col-sm-2">Action</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                                        <!--get all category if not this empty-->
+                        {% for cat in category %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <!--Serial No> -->
+                            <td> {{ cat.product_category }} </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'inventory:delete_category' cat.id %}" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                </div>
+
+                            </td>
+                        </tr>
+                        {% endfor%}
+
+
+                    <!--get all category if not this empty-->
+                    <!--    <tr>
+                            <td>2</td>
+                            <!--Serial No> -->
+                    <!--        <td>Apparel</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="http://easy-inventory.codeslab.net/admin/product/category/2" class="btn btn-xs btn-default" ><i class="fa fa-pencil"></i></a>
+                                    <a href="http://easy-inventory.codeslab.net/admin/product/delete_category/2" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                </div>
+
+                            </td>
+                        </tr>
+                    <!--get all category if not this empty-->
+                    <!--    <tr>
+                            <td>3</td>
+                            <!--Serial No> -->
+                    <!--        <td>Computer</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="http://easy-inventory.codeslab.net/admin/product/category/10" class="btn btn-xs btn-default" ><i class="fa fa-pencil"></i></a>
+                                    <a href="http://easy-inventory.codeslab.net/admin/product/delete_category/10" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                </div>
+
+                            </td>
+                        </tr>
+                    <!--get all category if not this empty-->
+                    <!--    <tr>
+                            <td>4</td>
+                            <!--Serial No> -->
+                        <!--    <td>Packaging</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="http://easy-inventory.codeslab.net/admin/product/category/12" class="btn btn-xs btn-default" ><i class="fa fa-pencil"></i></a>
+                                    <a href="http://easy-inventory.codeslab.net/admin/product/delete_category/12" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                </div>
+
+                            </td>
+                        </tr>-->
+                    <!--get all category if not this empty-->
+                                        </tbody>
+                </table>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!--/.col end -->
+    </div>
+    <!-- /.row -->
+</section>
+
+
+
+            </div>
+
+            <br />
+
+
+        </div><!-- /.right-side -->
+
+        <!-- Modal -->
+
+<div class="modal fade modal-wide" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+        <!-- Modal -->
+
+
+
+<div class="modal fade modal-small" id="modalSmall"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+
+
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+
+
+<!--
+<footer class="main-footer">
+
+        <strong>Copyright &copy; 2017 <a href="http://codeslab.net">codeslab.net</a>.</strong> All rights reserved.
+      </footer>
+      -->
+ </div><!-- ./wrapper -->
+
+<!-- AdminLTE App -->
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap.min.js" type="text/javascript"></script>
+<!--<script src="--><!--asset/js/menu.js" type="text/javascript"></script>-->
+<!--<script src="--><!--asset/js/custom-validation.js" type="text/javascript"></script>-->
+<script src="http://easy-inventory.codeslab.net/asset/js/jquery.validate.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/app.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/form-validation.js" type="text/javascript"></script>
+<!-- Jasny Bootstrap for NIce Image Change -->
+<script src="http://easy-inventory.codeslab.net/asset/js/jasny-bootstrap.min.js"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap-datepicker.js" ></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/timepicker.js" ></script>
+
+<!-- Data Table -->
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jszip.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/pdfmake.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/vfs_fonts.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.html5.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.print.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.fixedHeader.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.keyTable.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.responsive.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/responsive.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.scroller.min.js" type="text/javascript"></script>
+
+
+
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/morris.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/raphael.min.js" type="text/javascript"></script>
+
+
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').dataTable();
+    });
+    </script>
+
+	<script>
+		var handleDataTableButtons = function() {
+					"use strict";
+					0 !== $(".datatable-buttons").length && $(".datatable-buttons").DataTable({
+						"iDisplayLength": 25,
+
+						dom: "Bfrtip",
+						buttons: [{
+							extend: "copy",
+							className: "btn-sm"
+						}, {
+							extend: "csv",
+							className: "btn-sm"
+						}, {
+							extend: "excel",
+							className: "btn-sm"
+						}, {
+							extend: "pdf",
+							className: "btn-sm"
+						}, {
+							extend: "print",
+							className: "btn-sm"
+						}],
+						responsive: !0
+					})
+				},
+				TableManageButtons = function() {
+					"use strict";
+					return {
+						init: function() {
+							handleDataTableButtons()
+						}
+					}
+				}();
+
+
+
+		var handleCartButtons = function() {
+					"use strict";
+					0 !== $(".cart-buttons").length && $(".cart-buttons").DataTable({
+						"iDisplayLength": 25,
+
+						dom: "Bfrtip",
+						buttons: [
+							{
+
+								text: 'Add to Cart',
+								action: function ( e, dt, node, config ) {
+									document.getElementById("addToCart").submit();// Form submission
+								}
+							}
+						]
+
+					})
+				},
+				cartButtons = function() {
+					"use strict";
+					return {
+						init: function() {
+							handleCartButtons()
+						}
+					}
+				}();
+
+
+
+
+	</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#datatable').dataTable();
+        $('#datatable-keytable').DataTable({
+            keys: true,
+
+        });
+        $('#datatable-responsive').DataTable();
+        $('#datatable-scroller').DataTable({
+            ajax: "js/datatables/json/scroller-demo.json",
+            deferRender: true,
+            scrollY: 380,
+            scrollCollapse: true,
+            scroller: true
+
+        });
+        var table = $('#datatable-fixed-header').DataTable({
+            fixedHeader: true
+        });
+
+
+
+    });
+
+    TableManageButtons.init();
+	cartButtons.init();
+</script>
+
+
+{% endblock %}

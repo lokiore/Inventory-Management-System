@@ -1,0 +1,165 @@
+<div id="myModal" class="fade">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title" id="myModalLabel">Sony Play Station</h4>
+</div>
+<div class="modal-body wrap-modal wrap" style="max-height: 900px;">
+
+    <div class="row">
+        <div class="col-sm-6 col-md-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="product-thumbnail">
+                                                    <img src="{{ product.product_image.url }}" class="img-circle" alt="Product Image"/>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-8">
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th class="active" colspan="2">{{ product.product_name }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="col-sm-3">Product Code</td>
+                    <td>{{ product.product_code }}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-3 ">Product Name</td>
+                    <td class="">{{ product.product_name }}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-3 ">Product Category</td>
+                    <td class="">{{ product.product_category.product_category }}</td>
+                </tr>
+                <tr>
+                    <th class="active" colspan="2" >Product General Price</th>
+                </tr>
+                <tr>
+                    <td class="col-sm-3">Buying Price</td>
+                    <td class="">{{ product.cost_price }}</td>
+                </tr>
+                <tr>
+                    <td class="col-sm-3">Selling Price</td>
+                    <td>{{ product.selling_price }}</td>
+                </tr>
+
+                <tr>
+                    <th class="active" colspan="2">Special Offer</th>
+                </tr>
+                <tr>
+                    <td class="col-sm-3">Offer Start Date</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-3">Offer End Date</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="col-sm-3">Offer Price</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <th class="active" colspan="2">Tier Price</th>
+                </tr>
+
+                <tr>
+                    <td class="no-border" colspan="2">
+
+                        <table class="table table-bordered nowrap">
+                            <thead>
+                            <tr>
+                                <th>
+                                    Quantity Above
+                                </th>
+                                <th>
+                                    Price
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                                        </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="active" colspan="2">Attribute</th>
+                </tr>
+
+                <tr>
+                    <td class="no-border" colspan="2">
+
+                        <table class="table table-bordered nowrap">
+                            <thead>
+                            <tr>
+                                <th>
+                                    Attribute Label
+                                </th>
+                                <th>
+                                    Value
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                                        </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="active" colspan="2">Product Tag</th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+
+
+                    </td>
+                </tr>
+
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+    <div class="modal-footer" >
+
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            <a href="http://easy-inventory.codeslab.net/admin/product/add_product/22" type="button" class="btn btn-primary">Edit Product</a>
+
+        </div>
+
+</div>
+
+
+<!-- Modal -->
+
+<div class="modal fade modal-wide" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+
+</div>
+
+<script type="text/javascript">
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>

@@ -1,0 +1,666 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %} Add Product {% endblock %}
+{% load static %}
+{% block user %} {{ user.username }} {% endblock %}
+{% block body %}
+    <div class="right-side">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+
+           <!--  <div>
+                    <a href="http://www.codeslab.net/eoffice.php" class="more" target="_blank">We Have a <span style="color: red; font-weight: bold"> Pro Version. eOffice CRM </span><span style="color: red; font-weight: bold"></span>With Inventory + Sales & Purchase + Employee Management + Payroll + Accounting And <span style="color: red; font-weight: bold">Many More.</span></a>
+                </div>-->
+
+                <ol class="breadcrumb">
+                    <li>
+  <!--<a href='http://easy-inventory.codeslab.net/admin/product/add_product'>Add Product</a>-->
+</li>
+<li>
+ <!-- <a href='http://easy-inventory.codeslab.net/#'>Product</a>-->
+</li>
+                </ol>
+            </section>
+
+            <br/>
+            <div class="container-fluid">
+                <script src="http://easy-inventory.codeslab.net/asset/js/ajax.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+<link href="http://easy-inventory.codeslab.net/asset/css/jquery.tagit.css" rel="stylesheet" type="text/css" />
+<link href="http://easy-inventory.codeslab.net/asset/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="http://easy-inventory.codeslab.net/asset/js/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+             <script src="{% static 'inventory/js/inventory.js' %}"></script>
+
+
+
+
+<!-- View massage -->
+<section class="content" >
+    <div class="row" ng-controller="subcategoryController">
+        <div class="col-md-12">
+
+            <div class="box box-primary">
+
+                <div class="box-header box-header-background with-border">
+                    <h3 class="box-title ">Add New Product</h3>
+                </div>
+                <!-- /.box-header -->
+
+                <!-- form start -->
+                <form role="form" enctype="multipart/form-data" id="addProductForm"
+                      action="{% url 'inventory:add_product' %}" method="post">
+                {% csrf_token %}
+                    {{ form.errors }}
+                    {{ form.non_field_errors }}
+
+                    <br/><br/>
+
+                    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+                        <li class="active"><a href="#general" data-toggle="tab">General</a></li>
+                        <li class="">
+                            <a href="#price" data-toggle="tab">Price</a></li>
+                        <li><a href="#inventory" data-toggle="tab">Inventory</a></li>
+
+                    </ul>
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+
+                            <div id="my-tab-content" class="tab-content">
+                                <!-- ***************  General Tab Start ****************** -->
+                                <div class="tab-pane active" id="general" >
+
+
+
+
+                                        <!-- /.Product Code -->
+                                    <div class="form-group">
+                                        <label>Product Code <span class="required">*</span></label>
+                                        <input type="text"  name="product_code"  required
+                                               value="{{ form.product_code.value }}"
+                                               class="form-control">
+                                        <div class="required" id="product_code_result"></div>
+                                    </div>
+
+                                        <!-- /.Product Name -->
+                                        <div class="form-group">
+                                            <label>Product Name <span class="required">*</span></label>
+                                            <input type="text" placeholder="Product Name" name="product_name"
+                                                   value="{{ form.product_name.value }}"
+                                                   class="form-control">
+                                        </div>
+
+                                        <!-- /.Product Note -->
+                                        <div class="form-group">
+                                            <label>Product Supplier</label>
+                                            <select name="supplier" class="form-control col-sm-5" id="supplier"  >
+                                                <option value="">Select Supplier</option>
+                                                {% for supplier in suppliers %}
+                                                <option value="{{ supplier.id }}">
+                                                         {{ supplier }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <!-- /.Category -->
+                                        <div class="form-group" >
+                                            <label>Product Category</label>
+                                            <select name="product_category" class="form-control col-sm-5" id="category" ng-model="product_category" ng-change="getCategory()" >
+                                                <option value="">Select Product Category</option>
+                                                {% for category in categories %}
+                                                <option value="{{ category.id }}">
+                                                         {{ category.product_category }}
+                                                </option>
+                                                {% endfor %}
+
+                                            </select>
+                                        </div>
+
+                                        <!-- /.Sub Category -->
+                                        <div class="form-group">
+                                            <label>Subcategory<span class="required">*</span></label>
+                                            <select name="product_subcategory" class="form-control col-sm-5" id="subcategory" ng-model="product_subcategory">
+                                                <option value="">Product Subcategory</option>
+                                                <option ng-repeat="p in subcategories" value="{( p.id )}">{( p.subcategory )}</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- /.Tax -->
+                                        <!--<div class="form-group">
+                                            <label>Tax <span class="required">*</span></label>
+                                            <select name="tax_id" class="form-control col-sm-5">
+                                                <option value="">Select Tax</option>
+                                                                                                    <option value="2"
+                                                        >
+
+                                                        Fixed Tax Rate</option>
+                                                                                                    <option value="6"
+                                                        >
+
+                                                        V.A.T</option>
+                                                                                            </select>
+                                        </div>-->
+
+                                        <!-- /.Product Image -->
+                                       <div class="form-group">
+                                            <label>Product Image</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- hidden  old_path when update  -->
+                                         <input type="hidden" name="old_path"  value="">
+                                            <div class="fileinput fileinput-new"  data-provides="fileinput">
+                                                <div class="fileinput-new thumbnail g-logo-img" >
+                                                    <img src="http://easy-inventory.codeslab.net/img/product.png" alt="Product Image">
+                                                                                                    </div>
+                                                <div class="fileinput-preview fileinput-exists thumbnail g-logo-img"  ></div>
+                                                <div>
+                                                    <span class="btn btn-default btn-file">
+                                                        <span class="fileinput-new">
+                                                            <input type="file" name="product_image" /></span>
+                                                        <span class="fileinput-exists">Change</span>
+                                                    </span>
+                                                    <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                                </div>
+                                                <div id="valid_msg" class="required"></div>
+                                            </div>
+                                        </div>
+                                        <!-- / Product Image -->
+
+                                    <!-- /.box-body -->
+
+                                </div>
+
+                                <!-- ************* General Tab End ********************** -->
+
+                                <!-- ************* General Price Tab Start ************** -->
+
+                                <!-- /.Price Tab Start -->
+                                <div class="tab-pane
+
+
+                                " id="price">
+
+                                    <!-- /.General Price Start -->
+                                    <h5>Product General Price</h5>
+                                    <div class="box">
+                                        <div class="box-body">
+
+                                            <!-- /.Buying Price -->
+                                            <div class="form-group">
+                                                <label>Buying Price <span class="required">*</span></label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    $                                                </span>
+                                                <input type="text" id="buying_price" name="cost_price" placeholder="Buying Price"
+                                                       value="{{form.cost_price.value}}"
+                                                       class="form-control">
+                                            </div>
+                                            </div>
+
+                                            <!-- /.Selling Price -->
+                                            <div class="form-group form-group-bottom">
+                                                <label>Selling Price<span class="required">*</span></label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    $                                                </span>
+                                                <input class="form-control" name="selling_price" placeholder="Selling Price"
+                                                       value="{{ form.selling_price.value }}"
+                                                       type="text">
+                                            </div>
+                                            </div>
+
+                                        </div><!-- /.box-body -->
+                                    </div><!-- /.box -->
+                                    <!-- /.General Price End -->
+
+                                    <!-- ************* General Price Tab End **************** -->
+
+                                    <!-- ************* Special Offer Tab Start ************** -->
+
+                                    <!-- /.Special Offer Start -->
+                                    <h5>Special Offer</h5>
+                                    <div class="box">
+                                        <div class="box-body">
+
+                                            <!-- /.Start Date -->
+                                            <div class="form-group form-group-bottom">
+                                                <label>Start Date</label>
+                                            </div>
+                                            <div class="input-group">
+                                                <input type="text" value="{{ form.s_date.value }}" class="form-control datepicker" id="s_date" name="s_date" data-format="yyyy/mm/dd">
+
+                                                <div class="input-group-addon">
+                                                    <a href="#"><i class="entypo-calendar"></i></a>
+                                                </div>
+                                            </div>
+
+                                            <!-- /.End Date -->
+                                            <div class="form-group form-group-bottom">
+                                            <div class="form-group form-group-bottom">
+                                                <label >End Date</label>
+                                            </div>
+                                            <div class="input-group">
+                                                <input type="text" value="{{ form.e_date.value }}"
+                                                class="form-control datepicker" name="e_date" data-format="yyyy/mm/dd">
+
+                                                <div class="input-group-addon">
+                                                    <a href="#"><i class="entypo-calendar"></i></a>
+                                                </div>
+                                            </div>
+                                                </div>
+
+                                            <!-- /.Selling Price -->
+                                            <div class="form-group form-group-bottom">
+                                                <label>Special Offer Price</label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    $                                                </span>
+                                                <input class="form-control" placeholder="Price" name="price"
+                                                       value="{{ form.price.value }}"
+                                                       type="text">
+                                            </div>
+                                            </div>
+
+                                        </div><!-- /.box-body -->
+                                    </div><!-- /.box -->
+                                    <!-- /.Special Offer End -->
+
+                                    <!-- ************* Special Offer Tab End ************** -->
+
+                                    <!-- ************* Product Tier Price Start *********** -->
+
+                                    <!-- /.Tier Price Start -->
+                                    <!-- /.box -->
+                                    <!-- /.Tier Price End -->
+                                </div><!-- /.Price Tab End -->
+
+                                <!-- ************* Product Tier Price End *********** -->
+
+                                <!-- ************* Product Inventory Start ********** -->
+
+                                <!-- /.Inventory Tab Start -->
+                                <div class="tab-pane" id="inventory">
+
+                                    <!-- /.Product Inventory Start -->
+                                    <h5>Product Inventory</h5>
+                                    <div class="box">
+                                        <div class="box-body">
+
+                                            <!-- /.Buying Price -->
+                                            <div class="form-group">
+                                                <label>Product Quantity </label>
+                                                <input type="text" id="quantity" name="quantity" placeholder="0"
+                                                       value="0"
+                                                       class="form-control" disabled>
+                                            </div>
+
+                                            <!-- /.Selling Price -->
+                                            <div class="form-group">
+                                                <label>Notify Bellow Quantity </label>
+                                                <input type="text" name="notify_quantity" placeholder="Notify Quantity"
+                                                       value=""
+                                                       class="form-control">
+                                            </div>
+
+                                        </div><!-- /.box-body -->
+                                    </div><!-- /.box -->
+                                    <!-- /.Product Inventory End -->
+
+                                </div>
+                                <!-- /.Inventory Tab End -->
+
+                                <!-- ************* Product Inventory End ********** -->
+
+                                <!-- ************* Product Attribute Start ******** -->
+
+                                <!-- /.Attribute Tab Start -->
+
+                                <!-- /.Attribute Tab End -->
+
+                                    <!-- ************* hidden input field ******** -->
+
+                                    <!-- product image id -->
+                                    <input type="hidden" name="product_image_id"
+                                           value="">
+                                    <!-- product price id -->
+                                    <input type="hidden" name="product_price_id"
+                                           value="">
+                                    <!-- product special offer id -->
+                                    <input type="hidden" name="special_offer_id"
+                                           value="">
+                                    <!-- product inventory id -->
+                                    <input type="hidden" name="inventory_id"
+                                           value="">
+
+
+
+                                    <!-- product id -->
+
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+
+                    <div class="box-footer">
+                        <button type="submit"  id="submit" class="btn bg-navy btn-flat col-md-offset-3" type="submit">Save Product
+                        </button>
+                    </div>
+
+                </form>
+            </div><!-- /.box -->
+        </div><!--/.col end -->
+    </div><!-- /.row -->
+</section><!-- /.section -->
+
+
+
+<script lang="javascript">
+
+
+    $(document).ready(function() {
+        //***************** Tier Price Option Start *****************//
+        $(".addTire").click(function() {
+            $("#tireFields").append(
+                '<tr>\
+                    <td>\
+                    <div class="form-group form-group-bottom">\
+                        <input type="text" name="tier_quantity[]" required placeholder="Quantity"\
+            value="" class="form-control">\
+            </div>\
+                    </td>\
+                    <td>\
+                    <div class="form-group form-group-bottom">\
+                        <div class="input-group">\
+                <span class="input-group-addon">\
+                $                </span>\
+            <input class="form-control" placeholder="Price" name="tier_price[]" required type="text">\
+            </div>\
+            </div>\
+                        </td>\
+                        <td><a href="javascript:void(0);" class="remTire">Remove</a></td>\
+                    </tr>'
+            );
+        });
+        //***************** Tire Price Option End *****************//
+
+
+        //***************** Product Attribute Start ***************//
+        $(".addAttribute").click(function() {
+            $("#attributeFields").append(
+                '<tr>\
+                    <td>\
+                        <input type="text"  name="attribute_name[]" placeholder="Label"\
+            value="" class="form-control selector ui-autocomplete-input" autocomplete="off">\
+                    </td>\
+                    <td>\
+                        <input type="text" name="attribute_value[]" placeholder="Value"\
+            value="" class="form-control">\
+                        </td>\
+                        <td><a href="javascript:void(0);" class="remAttribute">Remove</a></td>\
+                        <input type="hidden" name="class_routine_details_id[]" value="">\
+                    </tr>'
+            );
+        });
+        //***************** Product Attribute End *****************//
+
+        //Remove Tire Fields
+        $("#tireFields").on('click', '.remTire', function() {
+            $(this).parent().parent().remove();
+        });
+
+        //Remove Attribute Fields
+        $("#attributeFields").on('click', '.remAttribute', function() {
+            $(this).parent().parent().remove();
+        });
+
+    });
+</script>
+
+
+<script>
+$(function(){
+    var sampleTags = [
+        'Mobile','Samsung','Camera','sony','Denim','Jeans','HTC','4G','HP','Laptop','T-shirt','Lacoste','Polo','ladies-polo','iphone4','Apple','iPhone','Mouse','Kindle','LED','TV','CPU Fan','color',    ];
+
+    //-------------------------------
+    // Allow spaces without quotes.
+    //-------------------------------
+    $('#allowSpacesTags').tagit({
+       availableTags: sampleTags,
+        allowSpaces: true,
+        fieldName: "tages[]",
+        tagLimit:3,
+        autocomplete: {delay: 0, minLength: 2}
+    });
+});
+</script>
+
+
+<script>
+    var options = {
+        source: [
+            'Brand','Size','Material','Top Style','Color','Operating System','Storage Capacity','Memory','Resolution','Monitor Type','Platform','Usb Port','TV Screen','Camera','Display','Processor','IMEI','test','4444',        ]
+
+    };
+    var result = 'input.selector';
+    $(document).on('keydown.autocomplete', result, function() {
+        $(this).autocomplete(options);
+    });
+
+</script>
+
+
+<!--    Image Validation Check    -->
+
+
+<script type="text/javascript">
+
+</script>
+            </div>
+
+            <br />
+
+
+        </div><!-- /.right-side -->
+
+        <!-- Modal -->
+
+<div class="modal fade modal-wide" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+        <!-- Modal -->
+
+
+
+<div class="modal fade modal-small" id="modalSmall"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+
+
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+
+
+   <!--
+<footer class="main-footer">
+
+        <strong>Copyright &copy; 2017 <a href="http://codeslab.net">codeslab.net</a>.</strong> All rights reserved.
+      </footer>-->
+
+ </div><!-- ./wrapper -->
+
+<!-- AdminLTE App -->
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap.min.js" type="text/javascript"></script>
+<!--<script src="--><!--asset/js/menu.js" type="text/javascript"></script>-->
+<!--<script src="--><!--asset/js/custom-validation.js" type="text/javascript"></script>-->
+<script src="http://easy-inventory.codeslab.net/asset/js/jquery.validate.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/app.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/form-validation.js" type="text/javascript"></script>
+<!-- Jasny Bootstrap for NIce Image Change -->
+<script src="http://easy-inventory.codeslab.net/asset/js/jasny-bootstrap.min.js"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap-datepicker.js" ></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/timepicker.js" ></script>
+
+<!-- Data Table -->
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jszip.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/pdfmake.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/vfs_fonts.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.html5.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.print.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.fixedHeader.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.keyTable.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.responsive.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/responsive.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.scroller.min.js" type="text/javascript"></script>
+
+
+
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/morris.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/raphael.min.js" type="text/javascript"></script>
+
+
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').dataTable();
+    });
+    </script>
+
+	<script>
+		var handleDataTableButtons = function() {
+					"use strict";
+					0 !== $(".datatable-buttons").length && $(".datatable-buttons").DataTable({
+						"iDisplayLength": 25,
+
+						dom: "Bfrtip",
+						buttons: [{
+							extend: "copy",
+							className: "btn-sm"
+						}, {
+							extend: "csv",
+							className: "btn-sm"
+						}, {
+							extend: "excel",
+							className: "btn-sm"
+						}, {
+							extend: "pdf",
+							className: "btn-sm"
+						}, {
+							extend: "print",
+							className: "btn-sm"
+						}],
+						responsive: !0
+					})
+				},
+				TableManageButtons = function() {
+					"use strict";
+					return {
+						init: function() {
+							handleDataTableButtons()
+						}
+					}
+				}();
+
+
+
+		var handleCartButtons = function() {
+					"use strict";
+					0 !== $(".cart-buttons").length && $(".cart-buttons").DataTable({
+						"iDisplayLength": 25,
+
+						dom: "Bfrtip",
+						buttons: [
+							{
+
+								text: 'Add to Cart',
+								action: function ( e, dt, node, config ) {
+									document.getElementById("addToCart").submit();// Form submission
+								}
+							}
+						]
+
+					})
+				},
+				cartButtons = function() {
+					"use strict";
+					return {
+						init: function() {
+							handleCartButtons()
+						}
+					}
+				}();
+
+
+
+
+	</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#datatable').dataTable();
+        $('#datatable-keytable').DataTable({
+            keys: true,
+
+        });
+        $('#datatable-responsive').DataTable();
+        $('#datatable-scroller').DataTable({
+            ajax: "js/datatables/json/scroller-demo.json",
+            deferRender: true,
+            scrollY: 380,
+            scrollCollapse: true,
+            scroller: true
+
+        });
+        var table = $('#datatable-fixed-header').DataTable({
+            fixedHeader: true
+        });
+
+
+
+    });
+
+    TableManageButtons.init();
+	cartButtons.init();
+</script>
+
+
+
+{% endblock %}

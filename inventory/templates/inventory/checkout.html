@@ -1,0 +1,542 @@
+{% extends 'inventory/base1.html' %}
+{% block title %} New Order {% endblock %}
+{% block user %} {{ user.username }} {% endblock %}
+{% block body %}
+{% load inventory_tags %}
+<div class="">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+
+                <ol class="breadcrumb">
+                    <li>
+  <!--<a href='http://easy-inventory.codeslab.net/admin/order/new_order'>New Order</a>-->
+</li>
+<li>
+  <!--<a href='http://easy-inventory.codeslab.net/#'>Order Process</a>-->
+</li>
+                </ol>
+            </section>
+
+            <br/>
+            <div class="container-fluid">
+                <script src="http://easy-inventory.codeslab.net/asset/js/ajax.js"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap-notify.js"></script>
+<link href="http://easy-inventory.codeslab.net/asset/css/animate.css" rel="stylesheet" type="text/css" />
+<!--Massage-->
+<!--/ Massage-->
+
+
+
+<section class="content">
+    <div class="row">
+
+
+        <div class="col-md-12">
+            <div class="portlet"><!-- /primary heading -->
+                <div class="portlet-heading">
+                    <h3 class="portlet-title text-dark text-uppercase">
+                        Shopping Cart
+                    </h3>
+                    <div class="pull-right">
+                        <h1 class="portlet-title text-dark text-uppercase">
+                            <a href="{% url 'inventory:new_order' %}" class="btn btn-success btn-xs">Place New Order</a>
+                            <a href="{% url 'inventory:dashboard' %}" class="btn btn-xs btn-danger" ><i class="fa fa-times"></i></a>
+
+                        </h1>
+
+                    </div>
+                </div>
+                <div id="portlet2" class="panel-collapse collapse in" style="margin-left:60vh;">
+                    <div class="portlet-body">
+
+
+                        <div class="row">
+
+                            <div class="col-md-7 col-sm-12">
+
+                                <div class="box">
+                                    <div class="box-header with-border box-header-background">
+                                        <h3 class="box-title ">Order Summary</h3>
+                                    </div>
+
+                                    <div id="cart_summary">
+                                        <script src="http://easy-inventory.codeslab.net/asset/js/ajax.js"></script>
+<link href="http://easy-inventory.codeslab.net/asset/css/select2.css" rel="stylesheet" type="text/css" />
+<script src="http://easy-inventory.codeslab.net/asset/js/select2.js"></script>
+
+<form method="post" action="{% url 'inventory:order_invoice' order.id %}">
+{% csrf_token %}
+<div class="box-background">
+
+        <div class="row">
+            <div class="col-md-12">
+
+
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">Order No.</label>
+
+                    <div class="col-sm-7">
+                        <input type="text" value="{{ order.id }}" disabled class="form-control ">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+</div>
+
+<div class="box-body">
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+                <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="submit" class="btn bg-blue" type="button" data-placement="top" data-toggle="tooltip">Customer</button>
+                      </span>
+                    <select class="form-control" name="id" required  ng-model="customer" ng-change="getDiscount()">
+
+                                                    <option value="">Select Customer</option>
+                                                    {% for customer in customers %}
+                                                    <option value="{{ customer.id }}">{{ customer.name }}</option>
+                                                    {% endfor %}
+
+                                                </select>
+              <!--  <select class="form-control" name="for_total" ng-model="total"
+                  -->  <input type="hidden" name="customer_flag" value="customer">
+                </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+
+        <div class="box-background" id="order">
+            <div class="box-body">
+                <div class="row">
+
+                    <div class="col-md-12">
+
+
+                       <div class="form-group">
+                            <label class="col-sm-5 control-label">Sub Total</label>
+
+                            <div class="col-sm-7">
+                                <input type="text" value="{{ order.total }}" disabled class="form-control unite">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Tax</label>
+
+                            <div class="col-sm-7">
+                                <input type="text" value="0.00" disabled class="form-control unite">
+                            </div>
+                        </div>
+
+                        <div class="form-group" >
+                            <label class="col-sm-5 control-label">Discount</label>
+
+                            <div class="col-sm-7">
+                                                                <div class="input-group">
+                                    <input type="text" class="form-control"
+                                           value="{(discount[0].discount)}" disabled>
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" style="margin-bottom: 5px"></div>
+
+
+
+
+
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="padding-top: 5px; font-size: 15px">Grand Total :</label>
+
+                        <div class="col-sm-8">
+                            <h2>${% gettotal1 order.total 9 %}  </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-background">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Payment Method</label>
+
+                            <div class="col-sm-7">
+                                <select name="payment_method" class="form-control" id="order_payment_type">
+                                    <option value="cash">Cash Payment</option>
+                                    <option value="cheque">Cheque Payment</option>
+                                    <option value="card">Credit Card</option>
+                                    <option value="pending">Pending Order</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" style="display: none" id="payment">
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">cheque/card Ref.</label>
+
+                            <div class="col-sm-7">
+                                <input class="form-control" name="payment_ref">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 order-panel"  id="shipping">
+                            <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+                                <li class="active"><a href="#shipping_address" data-toggle="tab">Shipping</a></li>
+                                <li><a href="#note" data-toggle="tab">Order Note</a></li>
+                            </ul>
+                        <div id="my-tab-content" class="tab-content">
+
+                            <!-- ***************  Cart Tab Start ****************** -->
+                                <div class="tab-pane active" id="shipping_address">
+                                    <div class="form-group">
+                                        <label>Shipping Address</label>
+                                                                                <textarea class="form-control" rows="4" name="shipping_address" placeholder="Enter ..." >{(discount[0].address)}</textarea>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="note">
+                                    <div class="form-group">
+                                        <label>Order Note</label>
+                                        <textarea class="form-control" name="note" rows="4" placeholder="Enter ..." disabled>{(discount[0].address)}</textarea>
+
+                                    </div>
+                                </div>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" id="btn_order" class="btn bg-navy btn-block btn-flat " type="submit" >Submit Order
+                    </button>
+                </div>
+            </div>
+        </div>
+
+            <!-- hidden field -->
+
+            <input type="hidden" name="customer_id" value="">
+            <input type="hidden" value="1031" name="order_no">
+            <input type="hidden" value="0" name="grand_total">
+            <input type="hidden" value="0" name="total_tax">
+            <input type="hidden" value="" name="discount_amount">
+            <input type="hidden" value="0" name="discount">
+</form>
+
+<script>
+    $(document).ready(function() {
+
+        $('.box-body').css({"border-top":"0px solid #ccc"});
+
+        $("#customer").select2({
+            placeholder: "Select a State",
+            allowClear: true
+        });
+
+    });
+
+</script>                                    </div>
+
+                                </div>
+                                <!-- /.box -->
+
+                            </div>
+                            <!--/.col end -->
+
+                            <!-- *********************** Purchase ************************** -->
+
+                            <!--/.col end -->
+
+
+                        </div>
+                        <!-- /.row -->
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+<script>
+
+    $().ready(function() {
+
+
+        // validate signup form on keyup and submit
+        $("#newform").validate({
+            rules: {
+                product_name: "required",
+                qty: "required",
+
+                product_name: {
+                    required: true
+                },
+                qty: {
+                    required: true,
+                    number: true
+                },
+
+                price: {
+                    required: true,
+                    number: true
+
+                }
+
+            },
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            messages: {
+
+                product_name: {
+                    required: "Please enter Product Name"
+                }
+
+
+
+            }
+
+        });
+
+    });
+</script>
+
+            </div>
+
+            <br />
+
+
+        </div><!-- /.right-side -->
+
+        <!-- Modal -->
+
+<div class="modal fade modal-wide" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+        <!-- Modal -->
+
+
+
+<div class="modal fade modal-small" id="modalSmall"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+
+
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+
+<!--
+
+<footer class="main-footer">
+
+        <strong>Copyright &copy; 2017 <a href="http://codeslab.net">codeslab.net</a>.</strong> All rights reserved.
+      </footer>
+      -->
+ </div><!-- ./wrapper -->
+
+<!-- AdminLTE App -->
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap.min.js" type="text/javascript"></script>
+<!--<script src="--><!--asset/js/menu.js" type="text/javascript"></script>-->
+<!--<script src="--><!--asset/js/custom-validation.js" type="text/javascript"></script>-->
+<script src="http://easy-inventory.codeslab.net/asset/js/jquery.validate.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/app.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/form-validation.js" type="text/javascript"></script>
+<!-- Jasny Bootstrap for NIce Image Change -->
+<script src="http://easy-inventory.codeslab.net/asset/js/jasny-bootstrap.min.js"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap-datepicker.js" ></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/timepicker.js" ></script>
+
+<!-- Data Table -->
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jszip.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/pdfmake.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/vfs_fonts.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.html5.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.print.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.fixedHeader.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.keyTable.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.responsive.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/responsive.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.scroller.min.js" type="text/javascript"></script>
+
+
+
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/morris.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/raphael.min.js" type="text/javascript"></script>
+
+
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').dataTable();
+    });
+    </script>
+
+	<script>
+		var handleDataTableButtons = function() {
+					"use strict";
+					0 !== $(".datatable-buttons").length && $(".datatable-buttons").DataTable({
+						"iDisplayLength": 25,
+
+						dom: "Bfrtip",
+						buttons: [{
+							extend: "copy",
+							className: "btn-sm"
+						}, {
+							extend: "csv",
+							className: "btn-sm"
+						}, {
+							extend: "excel",
+							className: "btn-sm"
+						}, {
+							extend: "pdf",
+							className: "btn-sm"
+						}, {
+							extend: "print",
+							className: "btn-sm"
+						}],
+						responsive: !0
+					})
+				},
+				TableManageButtons = function() {
+					"use strict";
+					return {
+						init: function() {
+							handleDataTableButtons()
+						}
+					}
+				}();
+
+
+
+
+
+
+
+
+	</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#datatable').dataTable();
+        $('#datatable-keytable').DataTable({
+            keys: true,
+
+        });
+        $('#datatable-responsive').DataTable();
+        $('#datatable-scroller').DataTable({
+            ajax: "js/datatables/json/scroller-demo.json",
+            deferRender: true,
+            scrollY: 380,
+            scrollCollapse: true,
+            scroller: true
+
+        });
+        var table = $('#datatable-fixed-header').DataTable({
+            fixedHeader: true
+        });
+
+
+
+    });
+
+    TableManageButtons.init();
+	cartButtons.init();
+</script>
+
+    <script>
+            $('.content-wrapper').css({"margin-left":"0px"});
+            $('.right-side').css({"margin-left":"0px"});
+            $('.main-footer').css({"margin-left":"0px"});
+            $('.wrapper').css({"background":"#ECF0F5"});
+            $('.skin-blue').css({"background":"#ECF0F5"});
+        </script>
+{% endblock %}

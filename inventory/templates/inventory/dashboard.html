@@ -1,0 +1,566 @@
+{% extends 'inventory/base.html' %}
+{% block title %} Dashboard {% endblock %}
+{% block user %} {{ user.username }} {% endblock %}
+{% block body %}
+{% load inventory_tags %}
+
+    <div class="right-side">
+            <!-- Content Header (Page header) -->
+            <!--<section class="content-header">
+            <!--
+             <div>
+                    <a href="http://www.codeslab.net/eoffice.php" class="more" target="_blank">We Have a <span style="color: red; font-weight: bold"> Pro Version. eOffice CRM </span><span style="color: red; font-weight: bold"></span>With Inventory + Sales & Purchase + Employee Management + Payroll + Accounting And <span style="color: red; font-weight: bold">Many More.</span></a>
+                </div>
+
+                <ol class="breadcrumb">
+                    <li>
+  <a href='index.html'>Dashboard</a>
+</li>
+                </ol>
+            </section>-->
+
+            <br/>
+            <div class="container-fluid">
+
+<!-- Page Content Start -->
+<!-- ================== -->
+
+<div class="wraper container-fluid">
+
+    <div class="row">
+        <div class="col-lg-3 col-sm-6 col-sx-12">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h2>
+                        $ {% getrev user %}                   </h2>
+                    <p>Revenue</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-bar-chart-o"></i>
+                </div>
+            <span class="small-box-footer">
+               Overall            </span>
+            </div>
+        </div><!-- ./col -->
+        <div class="col-lg-3 col-sm-6 col-sx-12">
+            <!-- small box -->
+            <div class="small-box bg-purple">
+                <div class="inner">
+                    <h2>
+                        $ {% getpro user %}                  </h2>
+                    <p> Profit</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-money"></i>
+                </div>
+            <span class="small-box-footer">
+                Overall            </span>
+            </div>
+        </div><!-- ./col -->
+        <div class="col-lg-3 col-sm-6 col-sx-12">
+            <!-- small box -->
+            <div class="small-box bg-info" >
+                <div class="inner">
+                    <span ><h2>{% getsales user %}</h2>
+                    <p>Quantity of Sales</p></span>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+            <span class="small-box-footer">
+                Overall            </span>
+            </div>
+        </div><!-- ./col -->
+        <div class="col-lg-3 col-sm-6 col-sx-12">
+            <!-- small box -->
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <span ><h2>$ {% getstock user %}</h2>
+                    <p>Value of Stock</p></span>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-suitcase"></i>
+                </div>
+            <span class="small-box-footer">
+              Cost of All Items Held in Stock
+            </span>
+            </div>
+        </div><!-- ./col -->
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="portlet"><!-- /primary heading -->
+                <div class="portlet-heading">
+                    <h3 class="portlet-title text-dark text-uppercase">
+                        Yearly Sales Report
+                    </h3>
+                </div>
+                <div id="portlet1" class="panel-collapse collapse in">
+                    <div class="portlet-body">
+                        <div id="morris-bar-example" style="height: 250px;"></div>
+
+                        <div class="row text-center m-t-30 m-b-30 chart-table">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <h4>
+                                   {% getreq user %}                               </h4>
+                                <small class="text-muted"> Today's Sales</small>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <h4>
+                                    {% getre user date.month %}                                </h4>
+                                <small class="text-muted">This Month's Sales</small>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+
+                                <h4>
+                                    {% getrep user date.year %}                         </h4>
+                                <small class="text-muted">This Year's Sales</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Portlet -->
+
+        </div>
+        <!-- end col -->
+
+        <div class="col-md-4">
+            <div class="portlet"><!-- /primary heading -->
+                <div class="portlet-heading">
+                    <h3 class="portlet-title text-dark text-uppercase">
+                        Top <strong>5</strong> Selling Product <strong>{{ date.year }}</strong>
+                    </h3>
+                </div>
+                <div id="portlet2" class="panel-collapse collapse in">
+                    <div class="portlet-body" style="height: 400px">
+
+                            <table class="table no-margin">
+                                <thead>
+                                <tr>
+                                    <th>Sl</th>
+                                    <th>Barcode</th>
+                                    <th>Product Name</th>
+                                    <th>Supplier</th>
+                                </tr>
+                                </thead>
+                            {% if products %}
+                                <tbody>
+                                {% for product in products %}
+                                                                                                        <tr>
+                                        <td >{{ forloop.counter }}</td>
+                                        <td class="highlight">{{ product.product_code }}</td>
+                                        <td>{{ product.product_name }}</td>
+                                        <td class="highlight"><strong>{{ product.supplier }}</strong></td>
+                                                                            </tr>
+                                {% endfor %}
+                                                                </tbody>
+                            {% else %}
+                            <tbody>
+                                                                    <tr style="column-span: 4">
+                                        <td><strong>No Records Found</strong></td>
+                                    </tr>
+
+                                                                </tbody>
+                            {% endif %}
+                            </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End row -->
+
+
+
+
+
+</div>
+<!-- Page Content Ends -->
+<!-- ================== -->
+
+
+
+<div class="wraper container-fluid">
+    <div class="row">
+
+        <div class="col-md-8">
+            <div class="portlet"><!-- /primary heading -->
+                <div class="portlet-heading">
+                    <h3 class="portlet-title text-dark text-uppercase">
+                        Recent Orders
+                    </h3>
+                </div>
+                <div id="portlet2" class="panel-collapse collapse in">
+                    <div class="portlet-body" style="height: 400px">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Order Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for order in orders %}
+
+                                                                    <tr>
+                                                                    {% if order.status == 1 %}
+                                        <td><a href="{% url 'inventory:ordinvoice' order.id %}">ORD{{ order.id }}</a></td>
+                                                                    {% else %}
+                                                                    <td>ORD{{ order.id }}</a></td>
+                                                                    {% endif %}
+                                        <td>{{ order.customer.name }}</td>
+                                        <td>{{ order.date }}</td>
+                                                                        {% if order.status == 1 %}
+                                        <td>
+                                                                                            <span class="label label-info">CONFIRM</span>
+
+                                        </td>
+                                                                        {% else %}
+                                                                        <td>
+                                                                                            <span class="label label-danger">CANCELLED</span>
+
+                                        </td>
+                                                                        {% endif %}
+                                        <td class="highlight"><strong>$ {{ order.total }}</strong></td>
+                                    </tr>
+                                {% endfor %}
+
+                                                                </tbody>
+                            </table>
+                        </div><!-- /.table-responsive -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="portlet"><!-- /primary heading -->
+                <div class="portlet-heading">
+                    <h5 class="portlet-title text-dark text-uppercase">
+                        Top 5 Selling Product {{ month }}                    </h5>
+                </div>
+                <div id="portlet2" class="panel-collapse collapse in">
+                    <div class="portlet-body" style="height: 400px">
+
+                            <table class="table no-margin">
+                                <thead>
+                                <tr>
+                                    <th>Sl</th>
+                                    <th>Barcode</th>
+                                    <th>Product Name</th>
+                                    <th>supplier</th>
+                                </tr>
+                                </thead>
+                                {% if productss %}
+                                <tbody>
+                                {% for product in productss %}
+                                                                                                        <tr>
+                                        <td >{{ forloop.counter }}</td>
+                                        <td class="highlight">{{ product.product_code }}</td>
+                                        <td>{{ product.product_name }}</td>
+                                        <td class="highlight"><strong>{{ product.supplier }}</strong></td>
+                                                                            </tr>
+                                {% endfor %}
+                                                                </tbody>
+                            {% else %}
+                            <tbody>
+                                                                    <tr style="column-span: 4">
+                                        <td><strong>No Records Found</strong></td>
+                                    </tr>
+
+                                                                </tbody>
+                            {% endif %}
+                            </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+
+
+
+<script>
+
+    $(function () {
+        //Bar chart
+        Morris.Bar({
+            element: 'morris-bar-example',
+            data: [
+                                { x: 'Jan',
+                    a: {% getre user 01 %},
+                    b: {% getpr user 01 %},
+                    c: {% getpu user 01 %}                },
+
+                                { x: 'Feb',
+                   a: {% getre user 02 %},
+                    b: {% getpr user 02 %},
+                    c: {% getpu user 02 %}                },
+
+                                { x: 'Mar',
+                    a: {% getre user 03 %},
+                    b: {% getpr user 03 %},
+                    c: {% getpu user 03 %}                },
+
+                                { x: 'Apr',
+                   a: {% getre user 04 %},
+                    b: {% getpr user 04 %},
+                    c: {% getpu user 04 %}                },
+                                { x: 'May',
+                    a: {% getre user 05 %},
+                    b: {% getpr user 05 %},
+                    c: {% getpu user 05 %}                },
+                                { x: 'Jun',
+                    a: {% getre user 06 %},
+                    b: {% getpr user 06 %},
+                    c: {% getpu user 06 %}                },
+
+                                { x: 'Jul',
+                   a: {% getre user 07 %},
+                    b: {% getpr user 07 %},
+                    c: {% getpu user 07 %}                },
+
+                                { x: 'Aug',
+                   a: {% getre user 08 %},
+                    b: {% getpr user 08 %},
+                    c: {% getpu user 08 %}                },
+
+                                { x: 'Sep',
+                    a: {% getre user 09 %},
+                    b: {% getpr user 09 %},
+                    c: {% getpu user 09 %}                },
+
+                                { x: 'Oct',
+                    a: {% getre user 10 %},
+                    b: {% getpr user 10 %},
+                    c: {% getpu user 10 %}                },
+
+                                { x: 'Nov',
+                    a: {% getre user 11 %},
+                    b: {% getpr user 11 %},
+                    c: {% getpu user 11 %}                },
+
+                                { x: 'Dec',
+                    a: {% getre user 12 %},
+                    b: {% getpr user 12 %},
+                    c: {% getpu user 12 %}                },
+
+
+            ],
+            xkey: 'x',
+            ykeys: ['a', 'b', 'c'],
+            labels: ['Revenue', 'Profit', 'Purchase'],
+            barColors: ['#3bc0c3', '#1a2942', '#5F5AAB']
+        });
+
+    });
+</script>            </div>
+
+            <br />
+
+
+        </div><!-- /.right-side -->
+
+        <!-- Modal -->
+
+<div class="modal fade modal-wide" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+        <!-- Modal -->
+
+
+
+<div class="modal fade modal-small" id="modalSmall"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+
+
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+
+
+
+
+ </div><!-- ./wrapper -->
+
+<!-- AdminLTE App -->
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap.min.js" type="text/javascript"></script>
+<!--<script src="--><!--asset/js/menu.js" type="text/javascript"></script>-->
+<!--<script src="--><!--asset/js/custom-validation.js" type="text/javascript"></script>-->
+<script src="http://easy-inventory.codeslab.net/asset/js/jquery.validate.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/app.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/form-validation.js" type="text/javascript"></script>
+<!-- Jasny Bootstrap for NIce Image Change -->
+<script src="http://easy-inventory.codeslab.net/asset/js/jasny-bootstrap.min.js"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap-datepicker.js" ></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/timepicker.js" ></script>
+
+<!-- Data Table -->
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jszip.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/pdfmake.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/vfs_fonts.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.html5.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.print.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.fixedHeader.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.keyTable.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.responsive.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/responsive.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.scroller.min.js" type="text/javascript"></script>
+
+
+
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/morris.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/raphael.min.js" type="text/javascript"></script>
+
+
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').dataTable();
+    });
+    </script>
+
+  <script>
+    var handleDataTableButtons = function() {
+          "use strict";
+          0 !== $(".datatable-buttons").length && $(".datatable-buttons").DataTable({
+            "iDisplayLength": 25,
+
+            dom: "Bfrtip",
+            buttons: [{
+              extend: "copy",
+              className: "btn-sm"
+            }, {
+              extend: "csv",
+              className: "btn-sm"
+            }, {
+              extend: "excel",
+              className: "btn-sm"
+            }, {
+              extend: "pdf",
+              className: "btn-sm"
+            }, {
+              extend: "print",
+              className: "btn-sm"
+            }],
+            responsive: !0
+          })
+        },
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons()
+            }
+          }
+        }();
+
+
+
+    var handleCartButtons = function() {
+          "use strict";
+          0 !== $(".cart-buttons").length && $(".cart-buttons").DataTable({
+            "iDisplayLength": 25,
+
+            dom: "Bfrtip",
+            buttons: [
+              {
+
+                text: 'Add to Cart',
+                action: function ( e, dt, node, config ) {
+                  document.getElementById("addToCart").submit();// Form submission
+                }
+              }
+            ]
+
+          })
+        },
+        cartButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleCartButtons()
+            }
+          }
+        }();
+
+
+
+
+  </script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#datatable').dataTable();
+        $('#datatable-keytable').DataTable({
+            keys: true,
+
+        });
+        $('#datatable-responsive').DataTable();
+        $('#datatable-scroller').DataTable({
+            ajax: "js/datatables/json/scroller-demo.json",
+            deferRender: true,
+            scrollY: 380,
+            scrollCollapse: true,
+            scroller: true
+
+        });
+        var table = $('#datatable-fixed-header').DataTable({
+            fixedHeader: true
+        });
+
+
+
+    });
+
+    TableManageButtons.init();
+  cartButtons.init();
+</script>
+{% endblock %}

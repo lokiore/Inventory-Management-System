@@ -1,0 +1,515 @@
+{% extends 'inventory/base1.html' %}
+
+{% block title %} New Purchase {% endblock %}
+{% block user %} {{ user.username }} {% endblock %}
+{% block body %}
+{% load inventory_tags %}
+<div class="right-side">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+
+                <ol class="breadcrumb">
+                    <li>
+  <!--<a href='http://easy-inventory.codeslab.net/admin/purchase/new_purchase'>New Purchase</a>-->
+</li>
+<li>
+  <!--<a href='http://easy-inventory.codeslab.net/#'>Purchase</a>-->
+</li>
+<li>
+ <!-- <a href='http://easy-inventory.codeslab.net/#'>Manage Purchase</a>-->
+</li>
+                </ol>
+            </section>
+
+            <br/>
+            <div class="container-fluid">
+                <script src="http://easy-inventory.codeslab.net/asset/js/ajax.js"></script>
+<!--Massage-->
+<!--/ Massage-->
+<script src="http://easy-inventory.codeslab.net/asset/js/ajax.js" type="text/javascript" charset="utf-8"></script>
+
+
+
+<div class="row" >
+<div class="col-md-12">
+    <div class="portlet"><!-- /primary heading -->
+
+        <div class="portlet-heading">
+            <h3 class="portlet-title text-dark text-uppercase">
+                Purchase Product
+            </h3>
+           <div class="pull-right">
+               <h1 class="portlet-title text-dark text-uppercase">
+                 <a href="{% url 'inventory:dashboard' %}" style="font-size: 25px"> <strong><i class="fa fa-times" aria-hidden="true"></i></strong> </a>
+               </h1>
+           </div>
+        </div>
+        <div id="portlet2" class="panel-collapse collapse in">
+            <div class="portlet-body">
+
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+
+                        <div class="box box-warning">
+                            <div class="box-header box-header-background-light with-border">
+                                <h3 class="box-title ">Select Product</h3>
+                            </div>
+
+
+                            <div class="box-body">
+
+
+                                <table class="table table-bordered table-hover purchase-products" id="">
+                                    <thead ><!-- Table head -->
+                                    <tr>
+                                        <th class="active col-sm-1">Sl</th>
+                                        <th class="active">Product Code</th>
+                                        <th class="active">Product Name</th>
+                                        <th class="active">Inventory</th>
+                                        <th class="active">Purchase</th>
+
+                                    </tr>
+                                    </thead><!-- / Table head -->
+                                    <tbody><!-- / Table body -->
+
+                                    <tr class="custom-tr" ng-repeat="p in products">
+                                            <td class="vertical-td">{($index + 1)}</td>
+                                            <td class="vertical-td highlight">{(p.code)}</td>
+                                            <td class="vertical-td">{(p.name)}</td>
+                                            <td class="vertical-td currency">{(p.quantity)}</td>
+                                            <td class="vertical-td " >
+                                                <form role="form" action="{% url 'inventory:new_purchase_purchase' value  %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="id" value="{(p.id)}" ng-model="p_id">
+                                                    <button type="submit" class="btn btn-primary btn-xs" title="Purchase" data-toggle="tooltip" data-placement="top"><i class="fa fa-shopping-cart"></i></button>
+
+                                                </form>
+
+                                            </td>
+
+                                        </tr>
+                                
+                                        <!--get all sub category if not this empty-->
+
+                                    </tbody><!-- / Table body -->
+
+                                </table> <!-- / Table -->
+
+
+                            </div><!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div><!--/.col end -->
+
+                    <!-- *********************** Purchase ************************** -->
+                    <div class="col-md-6 col-sm-12">
+
+                            <div class="box box-info">
+                                <div class="box-header box-header-background-light with-border">
+                                    <h3 class="box-title  ">Purchase Order</h3>
+                                </div>
+
+                                <div class="box-background">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+
+                                                <label>Supplier</label>
+                                                <select class="form-control" name="supplier_id" required  ng-model="supplier" ng-change="getProduct()">
+
+                                                    <option value="">Select Supplier</option>
+                                                    {% for supplier in suppliers %}
+                                                    <option value="{{ supplier.id }}">{{ supplier.company_name }}</option>
+                                                    {% endfor %}
+
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Date</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control datepicker" name="purchase_date" data-format="yyyy/mm/dd" value="{{ date }}" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+
+
+                                <div class="box-footer">
+
+                                </div>
+
+                                <!-- Table -->
+                                <div id="cart_content">
+                                    <table class="table table-bordered table-hover" id="">
+
+    <thead ><!-- Table head -->
+    <tr>
+        <th class="active">Sl</th>
+        <th class="active col-sm-6">Product</th>
+        <th class="active ">Qty</th>
+        <th class="active ">Unit Price</th>
+
+    </tr>
+    </thead><!-- / Table head -->
+    <tbody><!-- / Table body -->
+    <form method="post" action="{% url 'inventory:purchase_invoice' value %}">
+    {% csrf_token %}
+             <!--get error message if this empty-->
+        {% if not products %}
+        <td colspan="6">
+            <strong>There is no record for display</strong>
+        </td><!--/ get error message if this empty-->
+        {% else %}
+            {% for product in pis %}
+        <tr class="custom-tr">
+            <td class="vertical-td">
+                {{ forloop.counter }}            </td>
+            <td class="vertical-td">{{ product.product_name }}</td>
+            <td class="vertical-td">
+
+                <input  type="text" name="quantities" value="{{ product.quantity }}"   id="qty2d82939055a8ecc269854c77a3d1cc55" class="form-control">
+
+            </td>
+            <td class="vertical-td">
+
+                <input  type="text" name="price" value="{{ product.product.cost_price }}"   id="qty2d82939055a8ecc269854c77a3d1cc55" class="form-control" disabled>
+
+            </td>
+
+
+
+        </tr>
+            {% endfor %}
+
+        <tr>
+            <td colspan="3" class="text-right active">
+                <strong>Purchase Reference</strong>
+            </td>
+            <td colspan="3" class="text-left active">
+                <input type="text" name="purchase_ref" class="form-control">
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="3" class="text-right active">
+                <strong>Payment Method </strong>
+            </td>
+            <td colspan="3" class="text-left active">
+                <select name="payment_method" class="form-control" id="payment_type">
+                    <option value="cash">Cash Payment</option>
+                    <option value="cheque">Cheque Payment</option>
+                    <option value="card">Credit Card</option>
+                </select>
+            </td>
+        </tr>
+       <tr class="" id="payment" style="display:none">
+           <td colspan="3" class="text-right active">
+               <strong>Payment Reference(cheque/card)</strong>
+           </td>
+           <td colspan="3" class="text-left active">
+              <input type="text" name="payment_ref" class="form-control" >
+           </td>
+       </tr>
+
+        <tr>
+            <td colspan="3" class="text-right active">
+
+            </td>
+            <td colspan="3" class="text-left active">
+                <button type="submit" id="btn_purchase" class="btn bg-navy btn-block " type="submit">Purchase
+                </button>
+            </td>
+        </tr>
+
+        {% endif %}
+    </form>
+        </tbody><!-- / Table body -->
+</table> <!-- / Table -->
+<script src="http://easy-inventory.codeslab.net/asset/js/ajax.js"></script>                                </div>
+
+
+                            </div>
+                            <!-- /.box -->
+
+                    </div>
+                    <!--/.col end -->
+
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+<script>
+
+    $().ready(function() {
+
+        // validate signup form on keyup and submit
+        $("#newform").validate({
+            rules: {
+                product_name: "required",
+                qty: "required",
+
+                product_name: {
+                    required: true
+                },
+                qty: {
+                    required: true,
+                    number: true
+                },
+
+                price: {
+                    required: true,
+                    number: true
+
+                }
+
+            },
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            messages: {
+
+                product_name: {
+                    required: "Please enter Product Name"
+                }
+
+
+
+            }
+
+        });
+
+    });
+</script>
+
+            </div>
+
+            <br />
+
+
+        </div><!-- /.right-side -->
+
+        <!-- Modal -->
+
+<div class="modal fade modal-wide" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+        <!-- Modal -->
+
+
+
+<div class="modal fade modal-small" id="modalSmall"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+
+
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+
+
+<!--
+<footer class="main-footer">
+
+        <strong>Copyright &copy; 2017 <a href="http://codeslab.net">codeslab.net</a>.</strong> All rights reserved.
+      </footer>-->
+
+ </div><!-- ./wrapper -->
+
+<!-- AdminLTE App -->
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap.min.js" type="text/javascript"></script>
+<!--<script src="--><!--asset/js/menu.js" type="text/javascript"></script>-->
+<!--<script src="--><!--asset/js/custom-validation.js" type="text/javascript"></script>-->
+<script src="http://easy-inventory.codeslab.net/asset/js/jquery.validate.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/app.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/form-validation.js" type="text/javascript"></script>
+<!-- Jasny Bootstrap for NIce Image Change -->
+<script src="http://easy-inventory.codeslab.net/asset/js/jasny-bootstrap.min.js"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap-datepicker.js" ></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/timepicker.js" ></script>
+
+<!-- Data Table -->
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jszip.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/pdfmake.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/vfs_fonts.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.html5.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.print.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.fixedHeader.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.keyTable.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.responsive.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/responsive.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.scroller.min.js" type="text/javascript"></script>
+
+
+
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/morris.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/raphael.min.js" type="text/javascript"></script>
+
+
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').dataTable();
+    });
+    </script>
+
+	<script>
+		var handleDataTableButtons = function() {
+					"use strict";
+					0 !== $(".datatable-buttons").length && $(".datatable-buttons").DataTable({
+						"iDisplayLength": 25,
+
+						dom: "Bfrtip",
+						buttons: [{
+							extend: "copy",
+							className: "btn-sm"
+						}, {
+							extend: "csv",
+							className: "btn-sm"
+						}, {
+							extend: "excel",
+							className: "btn-sm"
+						}, {
+							extend: "pdf",
+							className: "btn-sm"
+						}, {
+							extend: "print",
+							className: "btn-sm"
+						}],
+						responsive: !0
+					})
+				},
+				TableManageButtons = function() {
+					"use strict";
+					return {
+						init: function() {
+							handleDataTableButtons()
+						}
+					}
+				}();
+
+
+
+		var handleCartButtons = function() {
+					"use strict";
+					0 !== $(".cart-buttons").length && $(".cart-buttons").DataTable({
+						"iDisplayLength": 25,
+
+						dom: "Bfrtip",
+						buttons: [
+							{
+
+								text: 'Add to Cart',
+								action: function ( e, dt, node, config ) {
+									document.getElementById("addToCart").submit();// Form submission
+								}
+							}
+						]
+
+					})
+				},
+				cartButtons = function() {
+					"use strict";
+					return {
+						init: function() {
+							handleCartButtons()
+						}
+					}
+				}();
+
+
+
+
+	</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#datatable').dataTable();
+        $('#datatable-keytable').DataTable({
+            keys: true,
+
+        });
+        $('#datatable-responsive').DataTable();
+        $('#datatable-scroller').DataTable({
+            ajax: "js/datatables/json/scroller-demo.json",
+            deferRender: true,
+            scrollY: 380,
+            scrollCollapse: true,
+            scroller: true
+
+        });
+        var table = $('#datatable-fixed-header').DataTable({
+            fixedHeader: true
+        });
+
+
+
+    });
+
+    TableManageButtons.init();
+	cartButtons.init();
+</script>
+<script>
+            $('.content-wrapper').css({"margin-left":"0px"});
+            $('.right-side').css({"margin-left":"0px"});
+            $('.main-footer').css({"margin-left":"0px"});
+            $('.wrapper').css({"background":"#ECF0F5"});
+            $('.skin-blue').css({"background":"#ECF0F5"});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,439 @@
+{% extends 'inventory/base.html' %}
+{% block title %} Subcategory {% endblock %}
+{% block user %} {{ user.username }} {% endblock %}
+{% block body %}
+    <div class="right-side">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+
+             <!--<div>
+                    <a href="http://www.codeslab.net/eoffice.php" class="more" target="_blank">We Have a <span style="color: red; font-weight: bold"> Pro Version. eOffice CRM </span><span style="color: red; font-weight: bold"></span>With Inventory + Sales & Purchase + Employee Management + Payroll + Accounting And <span style="color: red; font-weight: bold">Many More.</span></a>
+                </div>-->
+
+                <ol class="breadcrumb">
+                    <li>
+  <!--<a href='http://easy-inventory.codeslab.net/admin/product/subcategory'>Sub Category</a>-->
+</li>
+<li>
+  <!--<a href='http://easy-inventory.codeslab.net/#'>Category</a>-->
+</li>
+<li>
+  <!--<a href='http://easy-inventory.codeslab.net/#'>Product</a>-->
+</li>
+                </ol>
+            </section>
+
+            <br/>
+            <div class="container-fluid">
+                <!--Massage-->
+<!--/ Massage-->
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box box-primary">
+                <div class="box-header box-header-background with-border">
+                        <h3 class="box-title ">Product Sub Category</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-background">
+                <!-- form start -->
+                <form role="form" enctype="multipart/form-data"
+
+                      action="{% url 'inventory:subcategory' %}" method="post">
+                {% csrf_token %}
+                    <div class="row">
+
+                        <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3">
+
+                                <!-- /.category -->
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Product Category <span class="required">*</span></label>
+                                    <select name="product_category" class="form-control col-sm-5" required>
+                                        <option value="">Select Product Category</option>
+                                        {% for category in categories %}
+                                        <option value="{{ category.id }}">
+                                                    {{ category.product_category }}
+                                        </option>
+                                        {% endfor %}
+
+                                        <!--
+                                                                                            <option value="2"
+                                                     >
+                                                    Apparel                                                </option>
+                                                                                            <option value="10"
+                                                     >
+                                                    Computer                                                </option>
+                                                                                            <option value="12"
+                                                     >
+                                                    Packaging                                                </option>
+                                            -->                                                                            </select>
+
+                                 </div>
+
+                                <!-- /.category -->
+
+                                <!-- /.subcategory -->
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Product Subcategory <span class="required">*</span></label>
+                                    <input type="text" required name="product_subcategory" placeholder="Subcategory"
+                                           value=""
+                                           class="form-control">
+                                </div>
+                                <!-- /.subcategory -->
+
+                                <button type="submit" class="btn bg-navy btn-flat" type="submit">Save Subcategory
+                                </button><br/><br/>
+
+
+                        </div>
+                    </div>
+
+                </form>
+                </div>
+                <div class="box-footer">
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-10 col-md-offset-1">
+
+                        <!-- Table -->
+                        <table class="table table-bordered table-striped" id="dataTables-example">
+                            <thead ><!-- Table head -->
+                            <tr>
+                                <th class="col-sm-1 active">SL</th>
+                                <th class="active">Category</th>
+                                <th class="active">Sub Category</th>
+                                <th class="col-sm-1 active">Action</th>
+
+                            </tr>
+                            </thead><!-- / Table head -->
+                            <tbody><!-- / Table body -->
+                                                        <!--get all sub category if not this empty-->
+
+                            {% for category in categories %}
+
+                                {% for subcategory in category.subcategory_set.all %}
+                                <tr>
+                                    <td>{{ iterator.next }}</td>
+                                    <td>{{ subcategory.product_category }}</td>
+                                    <td>{{ subcategory.product_subcategory }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'inventory:delete_subcategory' subcategory.id %}" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                            {% endfor %}
+                            <!--get all sub category if not this empty-->
+                             <!--   <tr>
+                                    <td>2</td>
+                                    <td>Electronics</td>
+                                    <td>TV</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/subcategory/2" class="btn btn-xs btn-default" ><i class="fa fa-pencil"></i></a>
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/delete_subcategory/2" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            <!--get all sub category if not this empty-->
+                            <!--    <tr>
+                                    <td>3</td>
+                                    <td>Electronics</td>
+                                    <td>Camera</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/subcategory/8" class="btn btn-xs btn-default" ><i class="fa fa-pencil"></i></a>
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/delete_subcategory/8" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            <!--get all sub category if not this empty-->
+                             <!--   <tr>
+                                    <td>4</td>
+                                    <td>Apparel</td>
+                                    <td>Polo T-Shirt</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/subcategory/3" class="btn btn-xs btn-default" ><i class="fa fa-pencil"></i></a>
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/delete_subcategory/3" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            <!--get all sub category if not this empty-->
+                             <!--   <tr>
+                                    <td>5</td>
+                                    <td>Apparel</td>
+                                    <td>T-Shirt</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/subcategory/4" class="btn btn-xs btn-default" ><i class="fa fa-pencil"></i></a>
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/delete_subcategory/4" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            <!--get all sub category if not this empty-->
+                            <!--    <tr>
+                                    <td>6</td>
+                                    <td>Computer</td>
+                                    <td>Laptop</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/subcategory/5" class="btn btn-xs btn-default" ><i class="fa fa-pencil"></i></a>
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/delete_subcategory/5" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            <!--get all sub category if not this empty-->
+                            <!--    <tr>
+                                    <td>7</td>
+                                    <td>Computer</td>
+                                    <td>Accessories</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/subcategory/6" class="btn btn-xs btn-default" ><i class="fa fa-pencil"></i></a>
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/delete_subcategory/6" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            <!--get all sub category if not this empty-->
+                            <!--    <tr>
+                                    <td>8</td>
+                                    <td>Packaging</td>
+                                    <td>Packing</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/subcategory/7" class="btn btn-xs btn-default" ><i class="fa fa-pencil"></i></a>
+                                            <a href="http://easy-inventory.codeslab.net/admin/product/delete_subcategory/7" class="btn btn-xs btn-danger" ><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            <!--get all sub category if not this empty-->
+                                                        </tbody><!-- / Table body -->
+                        </table> <!-- / Table -->
+                    </div>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!--/.col end -->
+    </div>
+    <!-- /.row -->
+</section>
+
+
+
+            </div>
+
+            <br />
+
+
+        </div><!-- /.right-side -->
+
+        <!-- Modal -->
+
+<div class="modal fade modal-wide" id="myModal"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+        <!-- Modal -->
+
+
+
+<div class="modal fade modal-small" id="modalSmall"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div id="product_modal" class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+
+
+    $('body').on('hidden.bs.modal', '.modal', function() {
+        $(this).removeData('bs.modal');
+    });
+
+
+</script>
+
+
+
+     <!--
+<footer class="main-footer">
+
+        <strong>Copyright &copy; 2017 <a href="http://codeslab.net">codeslab.net</a>.</strong> All rights reserved.
+      </footer>-->
+
+ </div><!-- ./wrapper -->
+
+<!-- AdminLTE App -->
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap.min.js" type="text/javascript"></script>
+<!--<script src="--><!--asset/js/menu.js" type="text/javascript"></script>-->
+<!--<script src="--><!--asset/js/custom-validation.js" type="text/javascript"></script>-->
+<script src="http://easy-inventory.codeslab.net/asset/js/jquery.validate.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/app.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/form-validation.js" type="text/javascript"></script>
+<!-- Jasny Bootstrap for NIce Image Change -->
+<script src="http://easy-inventory.codeslab.net/asset/js/jasny-bootstrap.min.js"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/bootstrap-datepicker.js" ></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/timepicker.js" ></script>
+
+<!-- Data Table -->
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/jszip.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/pdfmake.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/vfs_fonts.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.html5.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/buttons.print.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.fixedHeader.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.keyTable.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.responsive.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/responsive.bootstrap.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/plugin/datatables/dataTables.scroller.min.js" type="text/javascript"></script>
+
+
+
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/morris.min.js" type="text/javascript"></script>
+<script src="http://easy-inventory.codeslab.net/asset/js/morris/raphael.min.js" type="text/javascript"></script>
+
+
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').dataTable();
+    });
+    </script>
+
+	<script>
+		var handleDataTableButtons = function() {
+					"use strict";
+					0 !== $(".datatable-buttons").length && $(".datatable-buttons").DataTable({
+						"iDisplayLength": 25,
+
+						dom: "Bfrtip",
+						buttons: [{
+							extend: "copy",
+							className: "btn-sm"
+						}, {
+							extend: "csv",
+							className: "btn-sm"
+						}, {
+							extend: "excel",
+							className: "btn-sm"
+						}, {
+							extend: "pdf",
+							className: "btn-sm"
+						}, {
+							extend: "print",
+							className: "btn-sm"
+						}],
+						responsive: !0
+					})
+				},
+				TableManageButtons = function() {
+					"use strict";
+					return {
+						init: function() {
+							handleDataTableButtons()
+						}
+					}
+				}();
+
+
+
+		var handleCartButtons = function() {
+					"use strict";
+					0 !== $(".cart-buttons").length && $(".cart-buttons").DataTable({
+						"iDisplayLength": 25,
+
+						dom: "Bfrtip",
+						buttons: [
+							{
+
+								text: 'Add to Cart',
+								action: function ( e, dt, node, config ) {
+									document.getElementById("addToCart").submit();// Form submission
+								}
+							}
+						]
+
+					})
+				},
+				cartButtons = function() {
+					"use strict";
+					return {
+						init: function() {
+							handleCartButtons()
+						}
+					}
+				}();
+
+
+
+
+	</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#datatable').dataTable();
+        $('#datatable-keytable').DataTable({
+            keys: true,
+
+        });
+        $('#datatable-responsive').DataTable();
+        $('#datatable-scroller').DataTable({
+            ajax: "js/datatables/json/scroller-demo.json",
+            deferRender: true,
+            scrollY: 380,
+            scrollCollapse: true,
+            scroller: true
+
+        });
+        var table = $('#datatable-fixed-header').DataTable({
+            fixedHeader: true
+        });
+
+
+
+    });
+
+    TableManageButtons.init();
+	cartButtons.init();
+</script>
+
+{% endblock %}
